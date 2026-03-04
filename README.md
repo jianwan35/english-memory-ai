@@ -101,3 +101,39 @@ git push -u origin work
 ```
 
 > 如果你希望使用 `main` 分支，请把命令中的 `work` 改为 `main`。
+
+
+## 常见问题：出现 `<<<<<<<` / `=======` / `>>>>>>>` 冲突怎么改
+
+这是 Git 合并冲突标记。你贴出来的这个例子里，实际上两边内容是同一条命令：
+
+```bash
+python app/english_memory_work.py import-csv --csv data/sample_phrases.csv
+```
+
+所以做法是：**保留命令本身，删除三行冲突标记**（`<<<<<<< ...`、`=======`、`>>>>>>> ...`）。
+
+推荐步骤：
+
+```bash
+# 1) 打开冲突文件并手动删掉冲突标记
+# 2) 标记为已解决
+git add README.md
+
+# 3) 完成合并提交
+git commit -m "fix: resolve README merge conflict"
+
+# 4) 推送
+git push
+```
+
+如果你想直接放弃本地冲突、用远端 main 版本覆盖当前 README：
+
+```bash
+git checkout --theirs README.md
+# 或者你想保留自己当前分支版本：
+# git checkout --ours README.md
+
+git add README.md
+git commit -m "fix: resolve README conflict by choosing theirs"
+```
